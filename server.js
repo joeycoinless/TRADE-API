@@ -73,12 +73,29 @@ app.post('/api/trades', (req, res) => {
     });
   }
   
+  const parsedQuantity = parseFloat(quantity);
+  const parsedPrice = parseFloat(price);
+  
+  if (isNaN(parsedQuantity) || parsedQuantity <= 0) {
+    return res.status(400).json({
+      success: false,
+      error: 'Quantity must be a positive number'
+    });
+  }
+  
+  if (isNaN(parsedPrice) || parsedPrice <= 0) {
+    return res.status(400).json({
+      success: false,
+      error: 'Price must be a positive number'
+    });
+  }
+  
   const trade = {
     id: nextId++,
     symbol: symbol.toUpperCase(),
     type: type.toLowerCase(),
-    quantity: parseFloat(quantity),
-    price: parseFloat(price),
+    quantity: parsedQuantity,
+    price: parsedPrice,
     timestamp: new Date().toISOString()
   };
   
